@@ -1,7 +1,7 @@
-import OpenInNew from '@material-ui/icons/OpenInNew'
 import * as React from 'react'
 
 import styles from './Layout.module.scss'
+import { Card, Title, Text } from '@gnosis.pm/safe-react-components'
 
 import ConnectButton from 'src/components/ConnectButton'
 import Block from 'src/components/layout/Block'
@@ -10,22 +10,28 @@ import Heading from 'src/components/layout/Heading'
 import Img from 'src/components/layout/Img'
 import Link from 'src/components/layout/Link'
 import { LOAD_ADDRESS, OPEN_ADDRESS } from 'src/routes/routes'
-import { marginButtonImg, secondary } from 'src/theme/variables'
+import { marginButtonImg } from 'src/theme/variables'
+import styled from 'styled-components'
 
 const plus = require('../assets/new.svg')
 const safe = require('../assets/safe.svg')
 
-const openIconStyle = {
-  height: '13px',
-  color: secondary,
-  marginBottom: '-2px',
-}
+const StyledCard = styled(Card)`
+  width: 333px;
+  display: inline-block;
+  margin: 0 20px 0 0;
+`
 
 const buttonStyle = {
   marginLeft: marginButtonImg,
 }
 
-export const CreateSafe = ({ provider, size }: any) => (
+interface CreateSafeProps {
+  provider?: string
+  size: string
+}
+
+export const CreateSafe = ({ provider, size }: CreateSafeProps): React.ReactElement => (
   <Button
     color="primary"
     component={Link}
@@ -42,7 +48,12 @@ export const CreateSafe = ({ provider, size }: any) => (
   </Button>
 )
 
-export const LoadSafe = ({ provider, size }) => (
+interface LoadSafeProps {
+  provider?: string
+  size: string
+}
+
+export const LoadSafe = ({ provider, size }: LoadSafeProps): React.ReactElement => (
   <Button
     color="primary"
     component={Link}
@@ -58,35 +69,31 @@ export const LoadSafe = ({ provider, size }) => (
   </Button>
 )
 
-const Welcome = ({ isOldMultisigMigration, provider }: any) => {
+interface Welcome {
+  provider?: string
+  isOldMultisigMigration: boolean
+}
+
+const Welcome = ({ isOldMultisigMigration, provider }: Welcome): React.ReactElement => {
   const headingText = isOldMultisigMigration ? (
     <>
-      We will replicate the owner structure from your existing Gnosis MultiSig
-      <br />
-      to let you test the new interface.
-      <br />
-      As soon as you feel comfortable, start moving funds to your new Safe.
-      <br />{' '}
+      We will replicate the owner structure from your existing Gnosis MultiSig to let you test the new interface. As
+      soon as you feel comfortable, start moving funds to your new Safe.{' '}
     </>
   ) : (
     <>
-      Gnosis Safe Multisig is the most secure way to manage crypto funds
-      <br />
-      collectively. It is an improvement of the Gnosis MultiSig, which is used by more than 3000 teams
-      <br /> and stores over $1B USD worth of digital assets. Gnosis Safe Multisig features a modular
-      <br /> design, formally verified smart contracts and vastly improved user experience.{' '}
+      Gnosis Safe Multisig is the most trusted platform to manage <br /> digital assets on Ethereum. Here is how to get
+      started:{' '}
     </>
   )
   return (
     <Block className={styles.safe}>
-      <Heading align="center" margin="lg" tag="h1" weight="bold">
-        Welcome to
-        <br />
-        Gnosis Safe Multisig
+      <Title size="md">Welcome to Gnosis Safe Multisig</Title>
+      <Heading align="left" margin="lg" tag="h1" weight="bold">
+        Welcome to Gnosis Safe Multisig
       </Heading>
-      <Heading align="center" margin="xl" tag="h3">
-        {headingText}
-        <a
+      <Title size="xs">{headingText}</Title>
+      {/* <a
           className={styles.learnMoreLink}
           href="https://gnosis-safe.io/teams"
           rel="noopener noreferrer"
@@ -94,16 +101,31 @@ const Welcome = ({ isOldMultisigMigration, provider }: any) => {
         >
           Learn more
           <OpenInNew style={openIconStyle} />
-        </a>
-      </Heading>
+        </a> */}
+
       {provider ? (
         <>
+          <StyledCard>
+            <Title size="xs">Connect wallet</Title>
+            <Text size="xl">
+              Gnosis Safe Multisig supports a wide range of wallets that you can choose to be one of the authentication
+              factors.
+            </Text>
+          </StyledCard>
+          <StyledCard>
+            <Title size="xs">Create Safe</Title>
+            <Text size="xl">
+              Create a new Safe Multisig that is controlled by one or multiple owners. <br />
+              You will be required to pay a network fee for creating your new Safe.
+            </Text>
+          </StyledCard>
+          {/* 
           <Block className={styles.safeActions} margin="md">
             <CreateSafe provider={provider} size="large" />
           </Block>
           <Block className={styles.safeActions} margin="md">
             <LoadSafe provider={provider} size="large" />
-          </Block>
+          </Block> */}
         </>
       ) : (
         <Block className={styles.connectWallet} margin="md">
