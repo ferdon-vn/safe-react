@@ -1,59 +1,14 @@
-import networks from 'src/config/networks'
-import { EnvironmentSettings, ETHEREUM_NETWORK, NetworkSettings, SafeFeatures } from 'src/config/networks/network.d'
-import { APP_ENV, ETHERSCAN_API_KEY, GOOGLE_ANALYTICS_ID, INFURA_TOKEN, NETWORK, NODE_ENV } from 'src/utils/constants'
-import { ensureOnce } from 'src/utils/singleton'
 import memoize from 'lodash.memoize'
 
-export const getNetworkId = (): ETHEREUM_NETWORK => ETHEREUM_NETWORK[NETWORK]
+import { ETHEREUM_NETWORK, NetworkSettings, SafeFeatures } from 'src/config/networks/network.d'
+import { ETHERSCAN_API_KEY, GOOGLE_ANALYTICS_ID, INFURA_TOKEN, NETWORK_NAME, NETWORK_ID, CURRENT_CONFIG } from 'src/utils/constants'
+import {configuration, NetworkSpecificConfiguration} from './utils'
 
-export const getNetworkName = (): string => ETHEREUM_NETWORK[getNetworkId()]
+export const getNetworkId = (): ETHEREUM_NETWORK => NETWORK_ID
 
-const getCurrentEnvironment = (): string => {
-  switch (NODE_ENV) {
-    case 'test': {
-      return 'test'
-    }
-    case 'production': {
-      return APP_ENV === 'production' ? 'production' : 'staging'
-    }
-    default: {
-      return 'dev'
-    }
-  }
-}
+export const getNetworkName = (): string => NETWORK_NAME
 
-type NetworkSpecificConfiguration = EnvironmentSettings & {
-  network: NetworkSettings,
-  disabledFeatures?: SafeFeatures,
-}
-
-const configuration = (): NetworkSpecificConfiguration => {
-  const currentEnvironment = getCurrentEnvironment()
-
-  // special case for test environment
-  if (currentEnvironment === 'test') {
-    const configFile = networks.local
-
-    return {
-      ...configFile.environment.production,
-      network: configFile.network,
-      disabledFeatures: configFile.disabledFeatures,
-    }
-  }
-
-  // lookup the config file based on the network specified in the NETWORK variable
-  const configFile = networks[getNetworkName().toLowerCase()]
-  // defaults to 'production' as it's the only environment that is required for the network configs
-  const networkBaseConfig = configFile.environment[currentEnvironment] ?? configFile.environment.production
-
-  return {
-    ...networkBaseConfig,
-    network: configFile.network,
-    disabledFeatures: configFile.disabledFeatures,
-  }
-}
-
-const getConfig: () => NetworkSpecificConfiguration = ensureOnce(configuration)
+const getConfig: () => NetworkSpecificConfiguration = () => CURRENT_CONFIG
 
 export const getTxServiceUrl = (): string => getConfig()?.txServiceUrl
 
