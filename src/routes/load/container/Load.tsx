@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { ETHEREUM_NETWORK } from 'src/config/networks/network.d'
 
 import Layout from 'src/routes/load/components/Layout'
 import { FIELD_LOAD_ADDRESS, FIELD_LOAD_NAME } from '../components/fields'
@@ -14,8 +15,8 @@ import { history } from 'src/store'
 import { SafeOwner, SafeRecordProps } from 'src/logic/safe/store/models/safe'
 import { List } from 'immutable'
 import { checksumAddress } from 'src/utils/checksumAddress'
-import { addSafe } from 'src/logic/safe/store/actions/addSafe'
 import { networkSelector, providerNameSelector, userAccountSelector } from 'src/logic/wallets/store/selectors'
+import { addOrUpdateSafe } from 'src/logic/safe/store/actions/addOrUpdateSafe'
 
 export const loadSafe = async (
   safeName: string,
@@ -46,8 +47,8 @@ const Load = (): React.ReactElement => {
   const network = useSelector(networkSelector)
   const userAddress = useSelector(userAccountSelector)
 
-  const addSafeHandler = (safe: SafeRecordProps) => {
-    dispatch(addSafe(safe))
+  const addSafeHandler = async (safe: SafeRecordProps) => {
+    await dispatch(addOrUpdateSafe(safe))
   }
   const onLoadSafeSubmit = async (values: LoadFormValues) => {
     let safeAddress = values[FIELD_LOAD_ADDRESS]
@@ -62,7 +63,7 @@ const Load = (): React.ReactElement => {
       safeAddress = checksumAddress(safeAddress)
       const ownerNames = getNamesFrom(values)
 
-      const gnosisSafe = await getGnosisSafeInstanceAt(safeAddress)
+      const gnosisSafe = getGnosisSafeInstanceAt(safeAddress)
       const ownerAddresses = await gnosisSafe.methods.getOwners().call()
       const owners = getOwnersFrom(ownerNames, ownerAddresses.slice().sort())
 
@@ -77,7 +78,12 @@ const Load = (): React.ReactElement => {
 
   return (
     <Page>
-      <Layout onLoadSafeSubmit={onLoadSafeSubmit} network={network} userAddress={userAddress} provider={provider} />
+      <Layout
+        onLoadSafeSubmit={onLoadSafeSubmit}
+        network={ETHEREUM_NETWORK[network]}
+        userAddress={userAddress}
+        provider={provider}
+      />
     </Page>
   )
 }
