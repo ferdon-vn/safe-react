@@ -11,23 +11,20 @@ export const CURRENT_ENVIRONMENT = getCurrentEnvironment(NODE_ENV, APP_ENV)
 export const INTERCOM_ID = APP_ENV === 'production' ? process.env.REACT_APP_INTERCOM_ID : 'plssl1fl'
 export const GOOGLE_ANALYTICS_ID = process.env.REACT_APP_GOOGLE_ANALYTICS || ''
 
-export const CURRENT_CONFIG: any = ensureOnce(configuration)
+export const CURRENT_CONFIG: NetworkSpecificConfiguration = ensureOnce(configuration)()
 
-export const PORTIS_ID = {
-  [ETHEREUM_NETWORK.RINKEBY]: '852b763d-f28b-4463-80cb-846d7ec5806b',
-  [ETHEREUM_NETWORK.MAINNET]: process.env.REACT_APP_PORTIS_ID,
-  [ETHEREUM_NETWORK.XDAI]: process.env.REACT_APP_PORTIS_ID,
-}
-export const FORTMATIC_KEY = {
-  [ETHEREUM_NETWORK.RINKEBY]: 'pk_test_CAD437AA29BE0A40',
-  [ETHEREUM_NETWORK.MAINNET]: process.env.REACT_APP_FORTMATIC_KEY,
-  [ETHEREUM_NETWORK.XDAI]: process.env.REACT_APP_FORTMATIC_KEY,
-}
-export const BLOCKNATIVE_KEY = {
-  [ETHEREUM_NETWORK.RINKEBY]: '7fbb9cee-7e97-4436-8770-8b29a9a8814c',
-  [ETHEREUM_NETWORK.MAINNET]: process.env.REACT_APP_BLOCKNATIVE_KEY,
-  [ETHEREUM_NETWORK.XDAI]: process.env.REACT_APP_BLOCKNATIVE_KEY,
-}
+export const PORTIS_ID = CURRENT_CONFIG.network.isTestNet
+  ? '852b763d-f28b-4463-80cb-846d7ec5806b'
+  : process.env.REACT_APP_PORTIS_ID || ''
+
+export const FORTMATIC_KEY = CURRENT_CONFIG.network.isTestNet
+  ? 'pk_test_CAD437AA29BE0A40'
+  : process.env.REACT_APP_FORTMATIC_KEY || ''
+
+export const BLOCKNATIVE_KEY = CURRENT_CONFIG.network.isTestNet
+  ? '7fbb9cee-7e97-4436-8770-8b29a9a8814c'
+  : process.env.REACT_APP_BLOCKNATIVE_KEY || ''
+
 /*
  * Not being used
 export const SQUARELINK_ID = {

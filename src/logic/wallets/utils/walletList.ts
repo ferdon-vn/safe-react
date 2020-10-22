@@ -1,12 +1,11 @@
 import { WalletInitOptions } from 'bnc-onboard/dist/src/interfaces'
 
 import { getNetworkId, getRpcServiceUrl } from 'src/config'
-import { ETHEREUM_NETWORK } from 'src/config/networks/network.d'
 import { FORTMATIC_KEY, PORTIS_ID } from 'src/utils/constants'
 
 const networkId = getNetworkId()
-const PORTIS_DAPP_ID = PORTIS_ID[networkId] ?? PORTIS_ID[ETHEREUM_NETWORK.RINKEBY]
-const FORTMATIC_API_KEY = FORTMATIC_KEY[networkId] ?? FORTMATIC_KEY[ETHEREUM_NETWORK.RINKEBY]
+const PORTIS_DAPP_ID = PORTIS_ID
+const FORTMATIC_API_KEY = FORTMATIC_KEY
 
 type Wallet = WalletInitOptions & {
   desktop: boolean
