@@ -1,4 +1,4 @@
-# Gnosis Safe Multisig
+# Gnosis Safe Multisig 
 
 The most trusted platform to store digital assets on Ethereum
 
@@ -8,7 +8,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+What things you need to install the software and how to install them.
 
 ```
 yarn add truffle // recommended usage of -g flag
