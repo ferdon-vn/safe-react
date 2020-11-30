@@ -1,4 +1,4 @@
-# Gnosis Safe Multisig 
+# Gnosis Safe Multisig with xDai
 
 The most trusted platform to store digital assets on Ethereum
 
@@ -38,7 +38,7 @@ yarn start-mainnet
 ```
 
 ### Building
-For Rinkeby:
+For xDai:
 ```
 yarn build
 ```
@@ -46,6 +46,12 @@ yarn build
 For Mainnet:
 ```
 yarn build-mainnet
+```
+
+## Deploy to Github Page
+
+```
+yarn deploy
 ```
 
 
